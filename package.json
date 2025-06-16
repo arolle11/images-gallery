@@ -11,6 +11,7 @@
   "dependencies": {
     "@rasenganjs/image": "^1.0.0",
     "@rasenganjs/serve": "^1.0.0",
+    "@rasenganjs/vercel": "^1.0.0",
     "@tailwindcss/vite": "^4.*",
     "lucide-react": "^0.515.0",
     "motion": "^12.18.1",

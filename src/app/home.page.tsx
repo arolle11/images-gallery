@@ -155,73 +155,192 @@ const Home: PageComponent = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
           >
             {/* Fond flouté */}
             <motion.div
               className="absolute inset-0 bg-black/80 backdrop-blur-md"
               onClick={closeImage}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.25, ease: "easeInOut" }}
             />
 
             {/* Contenu */}
             <div className="relative z-50 w-full max-w-6xl mx-4 h-[80vh] flex flex-col">
               {/* Bouton fermer */}
-              <button
+              <motion.button
                 onClick={closeImage}
                 className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <X size={32} />
-              </button>
+              </motion.button>
 
-              {/* Image principale */}
-              <motion.div
-                className="flex-1 relative"
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                transition={{ type: "spring", damping: 25 }}
-              >
-                <img
-                  src={images[selectedIndex].src}
-                  alt={images[selectedIndex].title}
-                  className="w-full h-80 object-contain"
-                />
-              </motion.div>
+              {/* Container pour les images */}
+              <div className="flex-1 flex items-center justify-center relative">
+                {/* Image précédente */}
+                <AnimatePresence custom={selectedIndex}>
+                  {selectedIndex > 0 && (
+                    <motion.div
+                      className="absolute left-0 w-[30%] z-20 origin-right"
+                      key={`prev-${selectedIndex}`}
+                      initial={{ x: "-80%", opacity: 0, scale: 0.9 }}
+                      animate={{
+                        x: "-10%",
+                        opacity: 0.7,
+                        scale: 0.95,
+                        transition: {
+                          type: "spring",
+                          stiffness: 250,
+                          damping: 25,
+                          mass: 0.5,
+                        },
+                      }}
+                      exit={{
+                        x: "-100%",
+                        opacity: 0,
+                        transition: { duration: 0.3, ease: "easeIn" },
+                      }}
+                    >
+                      <img
+                        src={images[selectedIndex - 1].src}
+                        alt={images[selectedIndex - 1].title}
+                        className="w-full h-[70vh] object-cover rounded-xl filter blur-[1px] brightness-90"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+
+                {/* Image actuelle */}
+                <motion.div
+                  className="relative z-30 w-[40%] mx-auto"
+                  key={`current-${selectedIndex}`}
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{
+                    scale: 1,
+                    opacity: 1,
+                    transition: {
+                      type: "spring",
+                      stiffness: 350,
+                      damping: 25,
+                      mass: 0.8,
+                    },
+                  }}
+                  exit={{
+                    scale: 0.9,
+                    opacity: 0,
+                    transition: {
+                      duration: 0.25,
+                      ease: "easeIn",
+                    },
+                  }}
+                >
+                  <img
+                    src={images[selectedIndex].src}
+                    alt={images[selectedIndex].title}
+                    className="w-full h-[70vh] object-cover rounded-xl shadow-2xl"
+                  />
+                </motion.div>
+
+                {/* Image suivante */}
+                <AnimatePresence custom={selectedIndex}>
+                  {selectedIndex < images.length - 1 && (
+                    <motion.div
+                      className="absolute right-0 w-[30%] z-20 origin-left"
+                      key={`next-${selectedIndex}`}
+                      initial={{ x: "80%", opacity: 0, scale: 0.9 }}
+                      animate={{
+                        x: "10%",
+                        opacity: 0.7,
+                        scale: 0.95,
+                        transition: {
+                          type: "spring",
+                          stiffness: 250,
+                          damping: 25,
+                          mass: 0.5,
+                        },
+                      }}
+                      exit={{
+                        x: "100%",
+                        opacity: 0,
+                        transition: { duration: 0.3, ease: "easeIn" },
+                      }}
+                    >
+                      <img
+                        src={images[selectedIndex + 1].src}
+                        alt={images[selectedIndex + 1].title}
+                        className="w-full h-[70vh] object-cover rounded-xl filter blur-[1px] brightness-90"
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
 
               {/* Navigation */}
-              <div className="mt-6 flex items-center justify-between  backdrop-blur-sm  px-6 py-3">
+              <motion.div
+                className="mt-6 flex items-center justify-between bg-white/5 backdrop-blur-md rounded-full px-6 py-3 mx-auto w-full max-w-md"
+                initial={{ y: 20, opacity: 0 }}
+                animate={{
+                  y: 0,
+                  opacity: 1,
+                  transition: { delay: 0.15, ease: "easeOut" },
+                }}
+                exit={{
+                  y: 20,
+                  opacity: 0,
+                  transition: { duration: 0.2 },
+                }}
+              >
                 <div className="flex items-center gap-4 text-white">
-                  <p className="text-sm font-bold">
+                  <motion.p
+                    className="text-sm font-bold"
+                    key={`counter-${selectedIndex}`}
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500 }}
+                  >
                     {selectedIndex + 1} / {images.length}
-                  </p>
-                  <h2 className="text-base opacity-50">
+                  </motion.p>
+                  <motion.h2
+                    className="text-base opacity-80"
+                    key={`title-${selectedIndex}`}
+                    initial={{ x: -10 }}
+                    animate={{ x: 0 }}
+                  >
                     {images[selectedIndex].title}
-                  </h2>
+                  </motion.h2>
                 </div>
 
                 <div className="flex items-center gap-6">
-                  <button
+                  <motion.button
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate("prev");
                     }}
                     disabled={selectedIndex === 0}
-                    className="text-white disabled:opacity-30 transition-colors"
+                    className="text-white disabled:opacity-30"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <MoveLeft size={28} />
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     onClick={(e) => {
                       e.stopPropagation();
                       navigate("next");
                     }}
                     disabled={selectedIndex === images.length - 1}
-                    className="text-white disabled:opacity-30 transition-colors"
+                    className="text-white disabled:opacity-30"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
                   >
                     <MoveRight size={28} />
-                  </button>
+                  </motion.button>
                 </div>
-              </div>
+              </motion.div>
             </div>
           </motion.div>
         )}
