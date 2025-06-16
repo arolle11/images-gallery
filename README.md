@@ -1,6 +1,6 @@
-# Gallery Project with Smooth Animations
+# Images Gallery
 
-![Project Preview](https://images-gallery-two.vercel.app)
+- [Project Preview](https://images-gallery-two.vercel.app)
 
 Une galerie d'images avec des animations fluides, construite avec Rasengan.js et Framer Motion.
 
